@@ -11,7 +11,6 @@
 
 #!/bin/sh
 
-
 # Ask for the administrator password upfront
 sudo -v
 
@@ -32,11 +31,19 @@ brew tap caskroom/cask
 
 echo ""
 echo "Brewing Stuff"
-brew install screenfetch wget ssh-copy-id mackup htop 
+brew install neofetch wget ssh-copy-id mackup htop youtube-dl
 
 echo ""
 echo "Installing My App Package"
-brew cask install monolingual linein paparazzi github-desktop 1password applepi-baker disk-inventory-x daisydisk spectacle skyfonts sitesucker sequel-pro superduper virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual vlc mplayerx invisionsync bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner thunderbird firefox fliqlo aerial skype the-unarchiver google-chrome adium calibre firefox flux fontprep handbrake transmission
+brew cask install visual-studio-code iina monolingual linein paparazzi github-desktop 1password applepi-baker disk-inventory-x daisydisk spectacle skyfonts sitesucker sequel-pro superduper virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual vlc mplayerx invisionsync bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner thunderbird firefox fliqlo aerial skype the-unarchiver google-chrome adium calibre firefox flux fontprep handbrake transmission
+
+echo ""
+echo "Restoring Apps Settings from Dropbox with Mackup"
+echo "Do you Want to restore App Settings using your Mackup Backup? (y/n)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  mackup restore
+fi
 
 echo ""
 echo "Disabling Boot Sound"
@@ -140,14 +147,6 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
 fi
 
 echo ""
-echo "Disable display from automatically adjusting brightness? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Display Enabled" -bool false
-fi
-
-
-echo ""
 echo "Increasing sound quality for Bluetooth headphones/headsets"
 defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
@@ -171,7 +170,6 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 # Screen
 ###############################################################################
 
-
 echo ""
 echo "Enabling subpixel font rendering on non-Apple LCDs"
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
@@ -180,9 +178,6 @@ defaults write NSGlobalDomain AppleFontSmoothing -int 2
 # Finder
 ###############################################################################
 
-#echo ""
-#echo "Showing icons for hard drives, servers, and removable media on the desktop"
-#defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 
 echo ""
 echo "Where do you want screenshots to be stored? (hit ENTER if you want ~/Desktop as default)"
@@ -269,20 +264,9 @@ echo "Enabling snap-to-grid for icons on the desktop and in other icon views"
 # Dock & Mission Control
 ###############################################################################
 
-# Wipe all (default) app icons from the Dock
-# This is only really useful when setting up a new Mac, or if you donâ€™t use
-# the Dock to launch apps.
-#defaults write com.apple.dock persistent-apps -array
-
 echo ""
 echo "Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate"
 defaults write com.apple.dock tilesize -int 36
-
-
-#echo ""
-#echo "Setting Dock to auto-hide and removing the auto-hiding delay"
-#defaults write com.apple.dock autohide -bool true
-
 
 ###############################################################################
 # Safari & WebKit
@@ -365,16 +349,12 @@ hash tmutil &> /dev/null && sudo tmutil disablelocal
 ###############################################################################
 
 echo ""
-echo "Disable smart quotes as itâ€™s annoying for messages that contain code"
+echo "Disable smart quotes as it is annoying for messages that contain code"
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticQuoteSubstitutionEnabled" -bool false
 
 echo ""
 echo "Disable continuous spell checking"
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
-
-###############################################################################
-# Personal Additions
-###############################################################################
 
 
 echo ""
@@ -386,3 +366,26 @@ defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
 ###############################################################################
 
 echo "Done!"
+
+##################
+# Uncomment to use
+##################
+# echo ""
+# echo "Disable display from automatically adjusting brightness? (y/n)"
+# read -r response
+# if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+#   sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Display Enabled" -bool false
+# fi
+
+# echo ""
+# echo "Showing icons for hard drives, servers, and removable media on the desktop"
+# defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
+
+# echo ""
+# echo "Setting Dock to auto-hide and removing the auto-hiding delay"
+# defaults write com.apple.dock autohide -bool true
+
+# Wipe all (default) app icons from the Dock
+# This is only really useful when setting up a new Mac, or if you donâ€™t use
+# the Dock to launch apps.
+#defaults write com.apple.dock persistent-apps -array
