@@ -35,7 +35,7 @@ brew install neofetch wget ssh-copy-id mackup htop youtube-dl
 
 echo ""
 echo "Installing My App Package"
-brew cask install visual-studio-code iina monolingual linein paparazzi github-desktop 1password applepi-baker disk-inventory-x daisydisk spectacle skyfonts sitesucker sequel-pro superduper virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual vlc mplayerx invisionsync bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner thunderbird firefox fliqlo aerial skype the-unarchiver google-chrome adium calibre firefox flux fontprep handbrake transmission
+brew cask install visual-studio-code iina monolingual linein paparazzi caprine github-desktop 1password applepi-baker disk-inventory-x daisydisk spectacle skyfonts sitesucker sequel-pro superduper virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual vlc mplayerx invisionsync bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner thunderbird firefox fliqlo aerial skype the-unarchiver google-chrome adium calibre firefox flux fontprep handbrake transmission
 
 echo ""
 echo "Restoring Apps Settings from Dropbox with Mackup"
