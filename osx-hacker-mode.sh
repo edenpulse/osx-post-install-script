@@ -30,6 +30,10 @@ echo "Installing Homebrew & Cask"
 brew tap caskroom/cask
 
 echo ""
+echo "Allow apps from anywhere"
+spctl --master-disable
+
+echo ""
 echo "Brewing Stuff"
 brew install neofetch wget ssh-copy-id mackup htop youtube-dl
 
