@@ -38,6 +38,11 @@ echo "Brewing Stuff"
 brew install mas node subliminal neofetch wget ssh-copy-id mackup htop youtube-dl thefuck
 
 echo ""
+echo "Installing Quicklook plugins"
+# https://github.com/sindresorhus/quick-look-plugins
+brew cask install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv betterzipql qlimagesize webpquicklook suspicious-package quicklookase qlvideo
+
+echo ""
 echo "Installing My App Package"
 brew cask install iina monolingual paparazzi github-desktop 1password applepi-baker daisydisk spectacle sitesucker sequel-pro superduper virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner firefox-beta fliqlo aerial skype the-unarchiver google-chrome adium calibre flux fontprep handbrake transmission
 
