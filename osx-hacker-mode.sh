@@ -268,9 +268,42 @@ echo "Enabling snap-to-grid for icons on the desktop and in other icon views"
 # Dock & Mission Control
 ###############################################################################
 
+echo "Wipe all (default) app icons from the Dock? (y/n)"
+echo "(This is only really useful when setting up a new Mac, or if you don't use the Dock to launch apps.)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  defaults write com.apple.dock persistent-apps -array
+fi
+
 echo ""
 echo "Setting the icon size of Dock items to 36 pixels for optimal size/screen-realestate"
 defaults write com.apple.dock tilesize -int 36
+
+echo ""
+echo "Speeding up Mission Control animations and grouping windows by application"
+defaults write com.apple.dock expose-animation-duration -float 0.1
+defaults write com.apple.dock "expose-group-by-app" -bool true
+
+echo ""
+echo "Disable the over-the-top focus ring animation"
+defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
+
+echo ""
+echo "Hide the menu bar? (y/n)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  defaults write "Apple Global Domain" "_HIHideMenuBar" 1
+fi
+
+echo ""
+echo "Set Dock to auto-hide and remove the auto-hiding delay? (y/n)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  defaults write com.apple.dock autohide -bool true
+  defaults write com.apple.dock autohide-delay -float 0
+  defaults write com.apple.dock autohide-time-modifier -float 0
+fi
+
 
 ###############################################################################
 # Safari & WebKit
@@ -393,3 +426,68 @@ echo "Done!"
 # This is only really useful when setting up a new Mac, or if you donâ€™t use
 # the Dock to launch apps.
 #defaults write com.apple.dock persistent-apps -array
+
+
+###############################################################################
+# Transmission.app                                                            #
+###############################################################################
+echo ""
+echo "Do you use Transmission for torrenting? (y/n)"
+read -r response
+if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  mkdir -p ~/Downloads/Incomplete
+  echo ""
+  echo "Setting up an incomplete downloads folder in Downloads"
+  defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
+  defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Incomplete"
+  echo ""
+  echo "Setting auto-add folder to be Downloads"
+  defaults write org.m0k.transmission AutoImportDirectory -string "${HOME}/Downloads"
+  echo ""
+  echo "Don't prompt for confirmation before downloading"
+  defaults write org.m0k.transmission DownloadAsk -bool false
+  echo ""
+  echo "Trash original torrent files after adding them"
+  defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
+  echo ""
+  echo "Hiding the donate message"
+  defaults write org.m0k.transmission WarningDonate -bool false
+  echo ""
+  echo "Hiding the legal disclaimer"
+  defaults write org.m0k.transmission WarningLegal -bool false
+  echo ""
+  echo "Auto-resizing the window to fit transfers"
+  defaults write org.m0k.transmission AutoSize -bool true
+  echo ""
+  echo "Auto updating to betas"
+  defaults write org.m0k.transmission AutoUpdateBeta -bool true
+  echo ""
+  echo "Setting up the best block list"
+  defaults write org.m0k.transmission EncryptionRequire -bool true
+  defaults write org.m0k.transmission BlocklistAutoUpdate -bool true
+  defaults write org.m0k.transmission BlocklistNew -bool true
+  defaults write org.m0k.transmission BlocklistURL -string "http://john.bitsurge.net/public/biglist.p2p.gz"
+fi
+
+
+
+###############################################################################
+# Kill affected applications
+###############################################################################
+echo ""
+cecho "Done!" $cyan
+echo ""
+echo ""
+cecho "################################################################################" $white
+echo ""
+echo ""
+cecho "Note that some of these changes require a logout/restart to take effect." $red
+cecho "Killing some open applications in order to take effect." $red
+echo ""
+
+find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
+for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
+  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
+  "Terminal" "Transmission"; do
+  killall "${app}" > /dev/null 2>&1
+done
