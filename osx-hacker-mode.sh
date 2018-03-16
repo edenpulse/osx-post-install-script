@@ -40,7 +40,7 @@ brew install exa mas node subliminal neofetch wget ssh-copy-id mackup htop youtu
 echo ""
 echo "Installing Quicklook plugins"
 # https://github.com/sindresorhus/quick-look-plugins
-brew cask install qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
+brew cask install qlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
 
 echo ""
 echo "Installing My App Package"
