@@ -44,7 +44,7 @@ brew cask install qlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlpret
 
 echo ""
 echo "Installing My App Package"
-brew cask install iina monolingual paparazzi 1password applepi-baker daisydisk spectacle sequel-pro superduper virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner fliqlo aerial skype the-unarchiver google-chrome adium calibre flux fontprep handbrake transmission
+brew cask install iina monolingual keka 1password etcher daisydisk spectacle virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner fliqlo aerial skype calibre flux handbrake transmission
 
 echo ""
 echo "Restoring Apps Settings from Dropbox with Mackup"
