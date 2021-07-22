@@ -7,15 +7,11 @@
 
 # Personnal Mod by @edenpulse
 # twitter.com/edenpulse
-# Feel free to mail at : hello@edenpulse.com
 
 #!/bin/sh
 
 # Ask for the administrator password upfront
 sudo -v
-
-echo "This script will make your Mac awesome"
-
 
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
@@ -26,7 +22,7 @@ osascript -e 'tell application "System Preferences" to quit'
 ###############################################################################
 echo ""
 echo "Installing Homebrew & Cask"
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 brew tap caskroom/cask
 
 echo ""
@@ -35,24 +31,16 @@ spctl --master-disable
 
 echo ""
 echo "Brewing Stuff"
-brew install exa mas node subliminal neofetch wget ssh-copy-id mackup htop youtube-dl thefuck zsh-syntax-highlighting zsh-history-substring-search
+brew install node subliminal neofetch wget ssh-copy-id htop youtube-dl zsh-syntax-highlighting zsh-history-substring-search
 
 echo ""
 echo "Installing Quicklook plugins"
 # https://github.com/sindresorhus/quick-look-plugins
-brew cask install qlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
+brew install qlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
 
 echo ""
 echo "Installing My App Package"
-brew cask install iina monolingual keka 1password etcher daisydisk spectacle virtualbox virtualbox-extension-pack transmission-remote-gui imageoptim textual bartender alfred sublime-text dropbox cleanmymac iterm2 slack spotify appcleaner fliqlo aerial skype calibre flux handbrake transmission
-
-echo ""
-echo "Restoring Apps Settings from Dropbox with Mackup"
-echo "Do you Want to restore App Settings using your Mackup Backup? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  mackup restore
-fi
+brew install --cask steam hackintool rocket cheatsheet boop istat-menus iina keka 1password etcher omnidisksweeper rectangle imageoptim bartender visual-studio alfred dropbox iterm2 slack spotify appcleaner calibre handbrake transmission
 
 echo ""
 echo "Disabling Boot Sound"
