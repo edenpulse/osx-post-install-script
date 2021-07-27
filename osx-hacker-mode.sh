@@ -31,12 +31,12 @@ spctl --master-disable
 
 echo ""
 echo "Brewing Stuff"
-brew install node subliminal neofetch wget ssh-copy-id htop youtube-dl zsh-syntax-highlighting zsh-history-substring-search
+brew install speedtest-cli node subliminal neofetch wget ssh-copy-id htop youtube-dl zsh-syntax-highlighting zsh-history-substring-search
 
 echo ""
 echo "Installing Quicklook plugins"
 # https://github.com/sindresorhus/quick-look-plugins
-brew install qlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
+brew installqlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
 
 echo ""
 echo "Installing My App Package"
