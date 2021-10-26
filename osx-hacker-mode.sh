@@ -22,8 +22,7 @@ osascript -e 'tell application "System Preferences" to quit'
 ###############################################################################
 echo ""
 echo "Installing Homebrew & Cask"
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
-brew tap caskroom/cask
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 echo ""
 echo "Allow apps from anywhere"
@@ -34,40 +33,50 @@ echo "Brewing Stuff"
 brew install speedtest-cli node subliminal neofetch wget ssh-copy-id htop youtube-dl zsh-syntax-highlighting zsh-history-substring-search
 
 echo ""
-echo "Installing Quicklook plugins"
-# https://github.com/sindresorhus/quick-look-plugins
-brew installqlvideo qlcolorcode qlstephen qlmarkdown quicklook-json qlprettypatch quicklook-csv qlimagesize webpquicklook suspicious-package quicklookase qlvideo
-
-echo ""
 echo "Installing My App Package"
-brew install --cask steam hackintool rocket cheatsheet boop istat-menus iina keka 1password etcher omnidisksweeper rectangle imageoptim bartender visual-studio alfred dropbox iterm2 slack spotify appcleaner calibre handbrake transmission
+brew install --cask \
+brave-browser \
+hazel \
+fontplop \
+discord \
+airbuddy \
+easyfind \
+forklift \
+colornsnapper \
+eve-launcher \
+telegram-desktop \
+github \
+balenaetcher \
+whatsapp \
+figma \
+steam \
+hackintool \
+cheatsheet  \
+istat-menus \
+iina \
+keka \
+1password \
+etcher \
+omnidisksweeper \
+rectangle \
+imageoptim \
+bartender \
+visual-studio \
+alfred \
+dropbox \
+iterm2 \
+slack \
+spotify \
+appcleaner \
+handbrake \
+transmission
 
 echo ""
-echo "Disabling Boot Sound"
-sudo nvram SystemAudioVolume=" "
-
-echo ""
-echo "Remove duplicates in the “Open With” menu (also see `lscleanup` alias)"
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
-
-
-## Always show scrollbars
-# echo ""
-# echo "Always show scrollbars"
-# defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
-## Possible values: `WhenScrolling`, `Automatic` and `Always`
-
-echo ""
-echo "Would you like to set your computer name (as done via System Preferences >> Sharing)?  (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  echo "What would you like it to be?"
-  read COMPUTER_NAME
-  sudo scutil --set ComputerName $COMPUTER_NAME
-  sudo scutil --set HostName $COMPUTER_NAME
-  sudo scutil --set LocalHostName $COMPUTER_NAME
-  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string $COMPUTER_NAME
-fi
+echo "Set Computer Name"
+sudo scutil --set ComputerName MacbookPro-Matt
+sudo scutil --set HostName MacbookPro-Matt
+sudo scutil --set LocalHostName MacbookPro-Matt
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string MacbookPro-Matt
 
 echo ""
 echo "Disabling OS X Gate Keeper"
@@ -76,46 +85,39 @@ sudo spctl --master-disable
 sudo defaults write /var/db/SystemPolicy-prefs.plist enabled -string no
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
-echo ""
-echo "Hide the Spotlight icon? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
-fi
+
 
 echo ""
-echo "Disable Spotlight indexing for any volume that gets mounted and has not yet been indexed before? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  echo 'Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.'
-  sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
-fi
-
-echo ""
-echo "Increasing the window resize speed for Cocoa applications"
-defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-
-echo ""
-echo "Expanding the save panel by default"
+echo "Expand save panel by default"
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 
 echo ""
 echo "Automatically quit printer app once the print jobs complete"
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
-# Try e.g. `cd /tmp; unidecode "\x{0000}" > cc.txt; open -e cc.txt`
 echo ""
-echo "Displaying ASCII control characters using caret notation in standard text views"
+echo "Stop iTunes from responding to the keyboard media keys"
+launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
+
+echo ""
+echo "Disable the “Are you sure you want to open this application?” dialog"
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+echo ""
+echo "Disable press-and-hold for keys in favor of key repeat"
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+echo ""
+echo "Finder: show all filename extensions"
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+echo ""
+echo "Display ASCII control characters using caret notation in standard text views"
 defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 
 echo ""
-echo "Disabling automatic termination of inactive apps"
-defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
-
-echo ""
-echo "Saving to disk (not to iCloud) by default"
+echo "Save to disk (not to iCloud) by default"
 defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 echo ""
@@ -123,25 +125,21 @@ echo "Reveal IP address, hostname, OS version, etc. when clicking the clock in t
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 echo ""
-echo "Check for software updates daily, not just once per week"
+echo "Check software updates daily, not just once per week"
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 
 echo ""
-echo "Disable smart quotes and smart dashes as theyâ€™re annoying when typing code"
+echo "Update extensions automatically"
+defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
+
+echo ""
+echo "Disable smart quotes as they’re annoying when typing code"
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input
 ###############################################################################
-
-echo ""
-echo "Disable keyboard from automatically adjusting backlight brightness in low light? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Keyboard Enabled" -bool false
-fi
 
 echo ""
 echo "Increasing sound quality for Bluetooth headphones/headsets"
@@ -155,84 +153,59 @@ echo ""
 echo "Disabling press-and-hold for keys in favor of a key repeat"
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
-echo ""
-echo "Setting a blazingly fast keyboard repeat rate (ain't nobody got time fo special chars while coding!)"
-defaults write NSGlobalDomain KeyRepeat -int 0
+# Set a blazingly fast keyboard repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 echo ""
 echo "Disabling auto-correct"
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
-###############################################################################
-# Screen
-###############################################################################
 
-echo ""
-echo "Enabling subpixel font rendering on non-Apple LCDs"
-defaults write NSGlobalDomain AppleFontSmoothing -int 2
+# Hot corners
+# Possible values:
+#  0: no-op
+#  2: Mission Control
+#  3: Show application windows
+#  4: Desktop
+#  5: Start screen saver
+#  6: Disable screen saver
+#  7: Dashboard
+# 10: Put display to sleep
+# 11: Launchpad
+# 12: Notification Center
+# 13: Lock Screen
+# Top left screen corner → Desktop
+defaults write com.apple.dock wvous-tl-corner -int 4
+defaults write com.apple.dock wvous-tl-modifier -int 0
+# Top right screen corner → Mission Control
+defaults write com.apple.dock wvous-tr-corner -int 2
+defaults write com.apple.dock wvous-tr-modifier -int 0
+# Bottom left screen corner → Start screen saver
+defaults write com.apple.dock wvous-bl-corner -int 5
+defaults write com.apple.dock wvous-bl-modifier -int 0
 
 ###############################################################################
 # Finder
 ###############################################################################
-
-
 echo ""
-echo "Where do you want screenshots to be stored? (hit ENTER if you want ~/Desktop as default)"
-# Thanks https://github.com/omgmog
-read screenshot_location
-echo ""
-if [ -z "${screenshot_location}" ]
-then
-  # If nothing specified, we default to ~/Desktop
-  screenshot_location="${HOME}/Desktop"
-else
-  # Otherwise we use input
-  if [[ "${screenshot_location:0:1}" != "/" ]]
-  then
-    # If input doesn't start with /, assume it's relative to home
-    screenshot_location="${HOME}/${screenshot_location}"
-  fi
-fi
-
-echo ""
-echo "Showing status bar in Finder by default"
+echo " Finder: show status bar"
 defaults write com.apple.finder ShowStatusBar -bool true
-
-echo ""
-echo "Show dotfiles in Finder by default? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  defaults write com.apple.finder AppleShowAllFiles TRUE
-fi
 
 echo ""
 echo "Allowing text selection in Quick Look/Preview in Finder by default"
 defaults write com.apple.finder QLEnableTextSelection -bool true
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
 echo ""
-echo "Displaying full POSIX path as Finder window title"
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+echo "Avoid creating .DS_Store files on network or USB volumes"
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 
 echo ""
-echo "Show all filename extensions in Finder by default? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-fi
+echo " Show the ~/Library folder"
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
-echo ""
-echo "Disable the warning when changing a file extension? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-fi
-
-echo ""
-echo "Avoid creation of .DS_Store files on network volumes? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-fi
 
 echo ""
 echo "Use column view in all Finder windows by default? (y/n)"
@@ -241,21 +214,10 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
   defaults write com.apple.finder FXPreferredViewStyle Clmv
 fi
 
-echo ""
-echo "Disable disk image verification? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  defaults write com.apple.frameworks.diskimages skip-verify -bool true
-  defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
-  defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
-fi
-
-echo ""
-echo "Enabling snap-to-grid for icons on the desktop and in other icon views"
-/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-
+# Disable disk image verification
+defaults write com.apple.frameworks.diskimages skip-verify -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
 
 ###############################################################################
 # Dock & Mission Control
@@ -298,55 +260,58 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
 fi
 
 
+
 ###############################################################################
-# Safari & WebKit
+# Safari & WebKit                                                             #
 ###############################################################################
-echo ""
-echo "Privacy: Don't send search queries to Apple"
+
+# Privacy: don’t send search queries to Apple
 defaults write com.apple.Safari UniversalSearchEnabled -bool false
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 
-echo ""
-echo "Hiding Safariâ€™s sidebar in Top Sites"
+# Show the full URL in the address bar (note: this still hides the scheme)
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+# Prevent Safari from opening ‘safe’ files automatically after downloading
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+# Hide Safari’s sidebar in Top Sites
 defaults write com.apple.Safari ShowSidebarInTopSites -bool false
 
-echo ""
-echo "Disabling Safariâ€™s thumbnail cache for History and Top Sites"
-defaults write com.apple.Safari DebugSnapshotsUpdatePolicy -int 2
-
-echo ""
-echo "Enabling Safariâ€™s debug menu"
-defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
-
-echo ""
-echo "Making Safariâ€™s search banners default to Contains instead of Starts With"
-defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
-
-echo ""
-echo "Removing useless icons from Safariâ€™s bookmarks bar"
-defaults write com.apple.Safari ProxiesInBookmarksBar "()"
-
-echo ""
-echo "Allow hitting the Backspace key to go to the previous page in history"
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2BackspaceKeyNavigationEnabled -bool true
-
-echo ""
-echo "Enabling the Develop menu and the Web Inspector in Safari"
+# Enable the Develop menu and the Web Inspector in Safari
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled" -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
-echo ""
-echo "Adding a context menu item for showing the Web Inspector in web views"
-defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+# Disable auto-correct
+defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
 
+# Disable AutoFill
+defaults write com.apple.Safari AutoFillFromAddressBook -bool false
+defaults write com.apple.Safari AutoFillPasswords -bool false
+defaults write com.apple.Safari AutoFillCreditCardData -bool false
+defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
 
-###############################################################################
-# Mail
-###############################################################################
+# Warn about fraudulent websites
+defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
 
-echo ""
-echo "Setting email addresses to copy as 'foo@example.com' instead of 'Foo Bar <foo@example.com>' in Mail.app"
+# Block pop-up windows
+defaults write com.apple.Safari WebKitJavaScriptCanOpenWindowsAutomatically -bool false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2JavaScriptCanOpenWindowsAutomatically -bool false
+
+# Disable auto-playing video
+#defaults write com.apple.Safari WebKitMediaPlaybackAllowsInline -bool false
+#defaults write com.apple.SafariTechnologyPreview WebKitMediaPlaybackAllowsInline -bool false
+#defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+#defaults write com.apple.SafariTechnologyPreview com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+
+# Enable “Do Not Track”
+defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+
+# Update extensions automatically
+defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
+
+# Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 
 
@@ -369,9 +334,26 @@ echo ""
 echo "Preventing Time Machine from prompting to use new hard drives as backup volume"
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
+###############################################################################
+# Mac App Store                                                               #
+###############################################################################
+
+
 echo ""
-echo "Disabling local Time Machine backups"
-hash tmutil &> /dev/null && sudo tmutil disablelocal
+echo "Enable the automatic update check"
+defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+
+echo ""
+echo "Check for software updates daily, not just once per week"
+defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
+
+echo ""
+echo "Download newly available updates in background"
+defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+
+echo ""
+echo "Install System data files & security updates"
+defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
 
 
 ###############################################################################
@@ -387,81 +369,32 @@ echo "Disable continuous spell checking"
 defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
 
 
-echo ""
-echo "Disable annoying backswipe in Chrome"
-defaults write com.google.Chrome AppleEnableSwipeNavigateWithScrolls -bool false
+###############################################################################
+# Spotlight                                                                   #
+###############################################################################
 
-###############################################################################
-# Kill affected applications
-###############################################################################
+# Hide Spotlight tray-icon (and subsequent helper)
+#sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
+# Disable Spotlight indexing for any volume that gets mounted and has not yet
+# been indexed before.
+# Use `sudo mdutil -i off "/Volumes/foo"` to stop indexing any volume.
+sudo defaults write /.Spotlight-V100/VolumeConfiguration Exclusions -array "/Volumes"
+# Load new settings before rebuilding the index
+killall mds > /dev/null 2>&1
+# Make sure indexing is enabled for the main volume
+sudo mdutil -i on / > /dev/null
+# Rebuild the index from scratch
+sudo mdutil -E / > /dev/null
+
 
 echo "Done!"
 
-##################
-# Uncomment to use
-##################
-# echo ""
-# echo "Disable display from automatically adjusting brightness? (y/n)"
-# read -r response
-# if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-#   sudo defaults write /Library/Preferences/com.apple.iokit.AmbientLightSensor "Automatic Display Enabled" -bool false
-# fi
-
-# echo ""
-# echo "Showing icons for hard drives, servers, and removable media on the desktop"
-# defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
-
-# echo ""
-# echo "Setting Dock to auto-hide and removing the auto-hiding delay"
-# defaults write com.apple.dock autohide -bool true
-
-# Wipe all (default) app icons from the Dock
-# This is only really useful when setting up a new Mac, or if you donâ€™t use
-# the Dock to launch apps.
-#defaults write com.apple.dock persistent-apps -array
-
-
 ###############################################################################
-# Transmission.app                                                            #
+# Photos                                                                      #
 ###############################################################################
-echo ""
-echo "Do you use Transmission for torrenting? (y/n)"
-read -r response
-if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]; then
-  mkdir -p ~/Downloads/Incomplete
-  echo ""
-  echo "Setting up an incomplete downloads folder in Downloads"
-  defaults write org.m0k.transmission UseIncompleteDownloadFolder -bool true
-  defaults write org.m0k.transmission IncompleteDownloadFolder -string "${HOME}/Downloads/Incomplete"
-  echo ""
-  echo "Setting auto-add folder to be Downloads"
-  defaults write org.m0k.transmission AutoImportDirectory -string "${HOME}/Downloads"
-  echo ""
-  echo "Don't prompt for confirmation before downloading"
-  defaults write org.m0k.transmission DownloadAsk -bool false
-  echo ""
-  echo "Trash original torrent files after adding them"
-  defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
-  echo ""
-  echo "Hiding the donate message"
-  defaults write org.m0k.transmission WarningDonate -bool false
-  echo ""
-  echo "Hiding the legal disclaimer"
-  defaults write org.m0k.transmission WarningLegal -bool false
-  echo ""
-  echo "Auto-resizing the window to fit transfers"
-  defaults write org.m0k.transmission AutoSize -bool true
-  echo ""
-  echo "Auto updating to betas"
-  defaults write org.m0k.transmission AutoUpdateBeta -bool true
-  echo ""
-  echo "Setting up the best block list"
-  defaults write org.m0k.transmission EncryptionRequire -bool true
-  defaults write org.m0k.transmission BlocklistAutoUpdate -bool true
-  defaults write org.m0k.transmission BlocklistNew -bool true
-  defaults write org.m0k.transmission BlocklistURL -string "http://john.bitsurge.net/public/biglist.p2p.gz"
-fi
 
+# Prevent Photos from opening automatically when devices are plugged in
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
 
 
 ###############################################################################
@@ -478,9 +411,25 @@ cecho "Note that some of these changes require a logout/restart to take effect."
 cecho "Killing some open applications in order to take effect." $red
 echo ""
 
-find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
-for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
-  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
-  "Terminal" "Transmission"; do
-  killall "${app}" > /dev/null 2>&1
+for app in "Activity Monitor" \
+	"Address Book" \
+	"Calendar" \
+	"cfprefsd" \
+	"Contacts" \
+	"Dock" \
+	"Finder" \
+	"Mail" \
+	"Messages" \
+	"Safari" \
+	"Photos" \
+	"Safari" \
+	"SizeUp" \
+	"Spectacle" \
+	"SystemUIServer" \
+	"Terminal" \
+	"Transmission" \
+	"Tweetbot" \
+	"Twitter" \
+	"iCal"; do
+	killall "${app}" &> /dev/null
 done
