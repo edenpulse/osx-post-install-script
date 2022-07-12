@@ -72,6 +72,12 @@ handbrake \
 transmission
 
 echo ""
+echo "Disabling warning of ejecting disk not the right way"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.DiskArbitration.diskarbitrationd.plist DADisableEjectNotification -bool YES && sudo pkill diskarbitrationd
+#re-enable it
+#sudo defaults delete /Library/Preferences/SystemConfiguration/com.apple.DiskArbitration.diskarbitrationd.plist DADisableEjectNotification && sudo pkill diskarbitrationd
+
+echo ""
 echo "Set Computer Name"
 sudo scutil --set ComputerName MacbookPro-Matt
 sudo scutil --set HostName MacbookPro-Matt
